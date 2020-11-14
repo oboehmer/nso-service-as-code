@@ -1,6 +1,7 @@
 
 stages:
   - dryrun
+  - commit
 
 dryrun:
   image: ${DOCKER_REPO}/${RUNNER_IMAGE}
