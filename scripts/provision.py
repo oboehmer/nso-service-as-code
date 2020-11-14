@@ -1,14 +1,16 @@
 #!/usr/bin/env python
-import yaml
-import json
-import os
-import requests
-from requests.auth import HTTPBasicAuth
-import logging
-import urllib3
-from attrdict import AttrDict
-import glob
 import argparse
+import glob
+import json
+import logging
+import os
+import sys
+
+import requests
+import urllib3
+import yaml
+from attrdict import AttrDict
+from requests.auth import HTTPBasicAuth
 
 urllib3.disable_warnings()
 logger = logging.getLogger(os.path.basename(__file__))
@@ -16,9 +18,11 @@ logger = logging.getLogger(os.path.basename(__file__))
 
 class L2vpnService(object):
 
-    def __init__(self):
+    def __init__(self, config_file=None):
 
-        with open(os.path.join(os.path.dirname(__file__), 'config.yaml')) as fd:
+        if config_file is None:
+            config_file = os.path.join(os.path.dirname(__file__), 'config.yaml')
+        with open(config_file) as fd:
             self.config = AttrDict(yaml.safe_load(fd.read()))
 
         self.service_dir = os.path.join(os.path.dirname(__file__), '../l2vpn')
@@ -37,7 +41,7 @@ class L2vpnService(object):
             method, uri, payload
         ))
         response = getattr(requests, method.lower())(url, headers=headers,
-                                                     auth=auth, verify=False, 
+                                                     auth=auth, verify=False,
                                                      data=payload)
         if response.status_code == 404:
             return {}
@@ -91,19 +95,21 @@ class L2vpnService(object):
         '''
         retrieve a list of customers currently provisioned
         '''
-        r = self.interact_with_nso(method='get', 
+        r = self.interact_with_nso(method='get',
                                    uri='/restconf/data/' + self.service)
         if int(r.status_code / 100) == 2:
             if len(r.content):
                 d = r.json()
             else:
                 d = {self.service: []}
-            
+
             return [c[self.config.service.key] for c in d[self.service] if self.config.service.key in c]
         else:
             r.raise_for_status()
 
-    def provision_services(self, cust=None, dryrun=True):
+    def provision_services(self, dryrun=True):
+
+        errors = 0
 
         # first remember which customers are currently provisioned so we can
         # handle deletion of the whole customer file
@@ -121,6 +127,7 @@ class L2vpnService(object):
             cust = self._get_customer_from_payload(service_payload)
             if cust is None:
                 logger.error('Error, no customer service data found in {}'.format(f))
+                errors += 1
                 continue
 
             msg = 'Provision service for customer "{}"'.format(cust)
@@ -131,16 +138,21 @@ class L2vpnService(object):
             logger.info(msg)
             response = self.interact_with_nso(method='put', uri=url, payload=json.dumps(service_payload))
             if dryrun:
-                logger.info('dryrun for cust {} returned status {}, content: {}'.format(
-                    cust, response.status_code, self._get_dryrun_payload(response)
+                logger.info('dryrun for cust {} returned status {}/{}, content: {}'.format(
+                    cust, response.ok, response.status_code, self._get_dryrun_payload(response)
                 ))
             else:
                 logger.info('PUT restconf operations returned {}/{}'.format(
                     response.ok, response.status_code))
+            if not response.ok:
+                errors += 1
 
-            # note that this customer has been provisioned
+            # note that this customer has been provisioned (ignoring errors)
             while cust in provisioned_customers:
                 provisioned_customers.remove(cust)
+
+        if errors > 0 and not dryrun:
+            return False
 
         # delete those customers which have not been provisioned earlier
         for cust in provisioned_customers:
@@ -153,18 +165,23 @@ class L2vpnService(object):
 
             response = self.interact_with_nso(method='delete', uri=url)
             if dryrun:
-                logger.info('dryrun for cust {} returned status {}, content: {}'.format(
-                    cust, response.status_code, self._get_dryrun_payload(response)
+                logger.info('dryrun for cust {} returned status {}/{}, content: {}'.format(
+                    cust, response.ok, response.status_code, self._get_dryrun_payload(response)
                 ))
             else:
                 logger.info('DELETE restconf operations returned {}/{}'.format(
                     response.ok, response.status_code))
+            if not response.ok:
+                errors += 1
+
+        return errors == 0
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Provision L2VPN service')
     parser.add_argument('--dryrun', action='store_true', help='only dryrun the operations')
     parser.add_argument('--debug', action='store_true', help='print more debugging output')
+    parser.add_argument('--config', help='config file to use')
     args = parser.parse_args()
 
     if args.debug:
@@ -172,4 +189,6 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.INFO)
 
-    L2vpnService().provision_services(dryrun=args.dryrun)
+    service = L2vpnService(config_file=args.config)
+    result = service.provision_services(dryrun=args.dryrun)
+    sys.exit(0 if result else 1)

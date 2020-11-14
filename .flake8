@@ -4,4 +4,4 @@ max-line-length = 200
 show-source = True
 count = True
 select = E,F,W,C
-ignore = W504  # Line breaks before binary operator
+ignore = W504, C901

@@ -1,0 +1,9 @@
+
+nso:
+  host: http://localhost:8081
+  username: admin
+  password: admin
+
+service:
+  path: l2vpn
+  key: customer-id
