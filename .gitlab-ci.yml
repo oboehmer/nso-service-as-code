@@ -1,0 +1,8 @@
+
+stages:
+  - dryrun
+
+dryrun:
+  image: ${LOCAL_REGISTRY}/${CXTA_BWI_IMAGE}
+  script:
+    - python scripts/provision.py --dryrun

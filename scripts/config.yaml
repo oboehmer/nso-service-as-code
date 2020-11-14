@@ -1,0 +1,9 @@
+
+nso:
+  host: http://cxta1-e.bwi-stf.lab:8081
+  username: admin
+  password: admin
+
+service:
+  path: l2vpn
+  key: customer-id
