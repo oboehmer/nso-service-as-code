@@ -3,7 +3,7 @@ stages:
   - dryrun
 
 dryrun:
-  image: ${LOCAL_REGISTRY}/${CXTA_BWI_IMAGE}
+  image: ${DOCKER_REPO}/${RUNNER_IMAGE}
   stage: dryrun
   script:
     - python scripts/provision.py --dryrun
