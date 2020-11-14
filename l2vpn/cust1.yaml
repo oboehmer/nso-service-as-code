@@ -17,21 +17,21 @@ l2vpn:
     qos-service-id: L2VPN-QOS
     vc-class: GEN-PWC-TYPE4
     vc-id: 10001
-# - service-id: l2vpn-10002
-#   access-device:
-#     device-id: PE0
-#     instance-id: 2841
-#     interface-id: 0/0/1
-#     ip-address: 192.1.1.30
-#     vlan-id: 101
-#   delivery-device:
-#     device-id: PE2
-#     instance-id: 2842
-#     interface-id: 0/0/0
-#     ip-address: 192.1.1.31
-#     vlan-id: 101
-#   link:
-#     qos-service-id: L2VPN-QOS
-#     vc-class: GEN-PWC-TYPE4
-#     vc-id: 10002
+- service-id: l2vpn-10002
+  access-device:
+    device-id: PE0
+    instance-id: 2841
+    interface-id: 0/0/1
+    ip-address: 192.1.1.30
+    vlan-id: 101
+  delivery-device:
+    device-id: PE0
+    instance-id: 2842
+    interface-id: 0/0/0
+    ip-address: 192.1.1.31
+    vlan-id: 101
+  link:
+    qos-service-id: L2VPN-QOS
+    vc-class: GEN-PWC-TYPE4
+    vc-id: 10002
 
