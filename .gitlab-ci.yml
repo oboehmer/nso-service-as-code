@@ -1,0 +1,18 @@
+
+stages:
+  - dryrun
+  - commit
+
+dryrun:
+  image: ${DOCKER_REPO}/${RUNNER_IMAGE}
+  stage: dryrun
+  script:
+    - python scripts/provision.py --dryrun
+
+commit:
+  image: ${DOCKER_REPO}/${RUNNER_IMAGE}
+  stage: commit
+  only:
+    - master
+  script:
+    - python scripts/provision.py
