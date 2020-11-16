@@ -8,7 +8,8 @@ import sys
 
 import requests
 import urllib3
-import yaml
+# using oyaml to maintain ordering of yaml file
+import oyaml as yaml
 from attrdict import AttrDict
 from requests.auth import HTTPBasicAuth
 

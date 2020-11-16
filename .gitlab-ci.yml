@@ -3,10 +3,14 @@ stages:
   - dryrun
   - commit
 
+.prep_container: &prep_container
+  - pip install oyaml
+
 dryrun:
   image: ${DOCKER_REPO}/${RUNNER_IMAGE}
   stage: dryrun
   script:
+    - *prep_container
     - python scripts/provision.py --dryrun
 
 commit:
@@ -15,4 +19,5 @@ commit:
   only:
     - master
   script:
+    - *prep_container
     - python scripts/provision.py
