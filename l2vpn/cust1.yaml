@@ -4,13 +4,13 @@ l2vpn:
   access-device:
     device-id: PE1
     instance-id: 2841
-    interface-id: 2
+    interface-id: 3
     ip-address: 192.1.1.30
     vlan-id: 100
   delivery-device:
     device-id: PE2
     instance-id: 2841
-    interface-id: 2
+    interface-id: 3
     ip-address: 192.1.1.31
     vlan-id: 100
   link:
@@ -21,13 +21,13 @@ l2vpn:
   access-device:
     device-id: PE1
     instance-id: 2842
-    interface-id: 2
+    interface-id: 3
     ip-address: 192.1.1.30
     vlan-id: 101
   delivery-device:
     device-id: PE2
     instance-id: 2842
-    interface-id: 2
+    interface-id: 3
     ip-address: 192.1.1.31
     vlan-id: 101
   link:
