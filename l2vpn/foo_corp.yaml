@@ -17,3 +17,20 @@ l2vpn:
     qos-service-id: L2VPN-QOS
     vc-class: GEN-PWC-TYPE4
     vc-id: 20001
+- service-id: l2vpn-foo-20002
+  access-device:
+    device-id: PE2
+    instance-id: 2501
+    interface-id: 3
+    ip-address: 10.0.0.1
+    vlan-id: 501
+  delivery-device:
+    device-id: PE3
+    instance-id: 2501
+    interface-id: 3
+    ip-address: 10.0.0.3
+    vlan-id: 501
+  link:
+    qos-service-id: L2VPN-QOS
+    vc-class: GEN-PWC-TYPE4
+    vc-id: 20002
