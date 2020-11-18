@@ -1,0 +1,19 @@
+customer-id: foo_corp
+l2vpn:
+- service-id: l2vpn-foo-20001
+  access-device:
+    device-id: PE1
+    instance-id: 2500
+    interface-id: 3
+    ip-address: 10.0.0.1
+    vlan-id: 500
+  delivery-device:
+    device-id: PE2
+    instance-id: 2500
+    interface-id: 3
+    ip-address: 10.0.0.2
+    vlan-id: 500
+  link:
+    qos-service-id: L2VPN-QOS
+    vc-class: GEN-PWC-TYPE4
+    vc-id: 20001
