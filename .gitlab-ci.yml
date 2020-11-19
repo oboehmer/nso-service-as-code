@@ -24,7 +24,7 @@ commit:
     - *prep_container
     - python scripts/provision.py --debug
 
-dryrun:
+test:
   image: ${DOCKER_REPO}/${RUNNER_IMAGE}
   stage: test
   script:
