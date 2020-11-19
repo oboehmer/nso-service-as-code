@@ -7,3 +7,10 @@ nso:
 service:
   path: l2vpn
   key: customer-id
+
+notify:
+  # can specify room_id and/or WebexTeams person email
+  #room_id:
+  persons:
+    - oboehmer@cisco.com
+

@@ -29,3 +29,14 @@ test:
   stage: test
   script:
     - echo 'test to be done'
+
+# last step in the pipeline to report status
+notify:
+  image: ${DOCKER_REPO}/${RUNNER_IMAGE}
+  stage: .post
+  script:
+    - pip install webexteamssdk
+    # assumes teams token is provided in environment variable
+    # WEBEX_API_NOTIFICATION_TOKEN
+    - echo $WEBEX_API_NOTIFICATION_TOKEN
+    - python scripts/provision.py
