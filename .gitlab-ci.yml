@@ -2,6 +2,7 @@
 stages:
   - dryrun
   - commit
+  - test
 
 .prep_container: &prep_container
   - pip install oyaml
@@ -18,6 +19,13 @@ commit:
   stage: commit
   only:
     - master
+    - test
   script:
     - *prep_container
     - python scripts/provision.py --debug
+
+dryrun:
+  image: ${DOCKER_REPO}/${RUNNER_IMAGE}
+  stage: test
+  script:
+    - echo 'test to be done'
