@@ -19,7 +19,7 @@ commit:
   stage: commit
   only:
     - master
-    - test
+    # - test
   script:
     - *prep_container
     - python scripts/provision.py --debug
@@ -39,4 +39,5 @@ notify:
     # assumes teams token is provided in environment variable
     # WEBEX_API_NOTIFICATION_TOKEN
     - echo $WEBEX_API_NOTIFICATION_TOKEN
-    - python scripts/provision.py
+    - env |grep CI
+    - python scripts/notify.py "Pipeline result $CI_JOB_STATUS ($CI_JOB_URL)"
