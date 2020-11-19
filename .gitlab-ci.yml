@@ -11,7 +11,7 @@ dryrun:
   stage: dryrun
   script:
     - *prep_container
-    - python scripts/provision.py --dryrun
+    - python scripts/provision.py --dryrun --debug
 
 commit:
   image: ${DOCKER_REPO}/${RUNNER_IMAGE}
@@ -20,4 +20,4 @@ commit:
     - master
   script:
     - *prep_container
-    - python scripts/provision.py
+    - python scripts/provision.py --debug
