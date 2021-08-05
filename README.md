@@ -1,6 +1,7 @@
-# cleu21-service
+# NSO Service as Code
 
 This is a "Network as Code" CICD pipeline which provisions a Layer2VPN p2p/VPWS service onto a IOS-XE network via NSO.
+This example demonstrate on how to use NSO to maintain network service configurations via a CICD pipeline, supporting create, update and delete operations on the service.
 
 The repository hosts the customer service data in the [l2vpn/](l2vpn/) directory as one yaml file per customer, any changes to these files (actually to all files in the repo) will trigger a CICD pipeline which provisions the service(s) on the network.  
 Only changes in master will provision the changes in the network, non-master branches trigger a so-called dry-run commit which only verifies the service data, but not perform any changes on the network.
